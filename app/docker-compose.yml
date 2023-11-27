@@ -1,0 +1,28 @@
+version: '3'
+services:
+  dbservice:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=3560
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - 3307:3306
+    networks:
+      - groceryapp
+
+  appservice:
+    build: ./target
+    depends_on:
+      - dbservice
+    environment:
+      - spring.datasource.url=jdbc:mysql://dbservice:3306/grocery_app?createDatabaseIfNotExist=true
+      - spring.datasource.username=root
+      - spring.datasource.password=3560
+    ports:
+      - 8085:9292
+    networks:
+      - groceryapp
+
+networks:
+  groceryapp:
